@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
+mongoose.connect('mongodb://localhost:27017');
 
 app.use(requestLogger);
 

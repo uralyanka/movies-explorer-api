@@ -5,10 +5,10 @@ const { patternUrl } = require('../constants/constants');
 const {
   createMovie,
   deleteMovieById,
-  getMovies,
+  getAllMovies,
 } = require('../controllers/movies');
 
-router.get('/', getMovies);
+router.get('/', getAllMovies);
 
 router.post('/', celebrate({
   body: Joi.object().keys({
