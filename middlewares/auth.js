@@ -6,7 +6,7 @@ const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'secret-key';
 
 module.exports = (req, res, next) => {
   const token = req.cookies.jwt;
-  // console.log('qweqwe = ', secretKey, token);
+  console.log('qweqwe = ', secretKey, token);
   if (!token) {
     throw new UnauthorizedError('401 - Необходима авторизация');
   }
