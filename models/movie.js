@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 const { patternUrl } = require('../constants/constants');
 
 const movieSchema = new mongoose.Schema({

@@ -3,30 +3,31 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const UnauthorizedError = require('../errors/unauthorizedError');
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: {
-      validator(email) {
-        return validator.isEmail(email);
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator(email) {
+          return validator.isEmail(email);
+        },
+        message: 'Неправильный формат почты',
       },
-      message: 'Неправильный формат почты',
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    name: {
+      type: String,
+      required: true,
+      minlength: [2, 'Имя должно быть длиннее 2х символов, сейчас его длина {VALUE} символ(ов)'],
+      maxlength: [30, 'Имя должно быть короче 30ти символов, сейчас его длина {VALUE} символ(ов)'],
     },
   },
-  password: {
-    type: String,
-    required: true,
-    select: false,
-  },
-  name: {
-    type: String,
-    required: true,
-    minlength: [2, 'Имя должно быть длиннее 2х символов, сейчас его длина {VALUE} символ(ов)'],
-    maxlength: [30, 'Имя должно быть короче 30ти символов, сейчас его длина {VALUE} символ(ов)'],
-  },
-},
   {
     versionKey: false,
   },

@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const ValidationError = require('../errors/validationError');
 const ConflictError = require('../errors/conflictError');
-const UnauthorizedError = require('../errors/unauthorizedError');
 
 require('dotenv').config();
 
@@ -58,7 +57,8 @@ module.exports.updateUserProfile = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, email },
-    { new: true, runValidators: true})
+    { new: true, runValidators: true },
+  )
     .then((user) => res.send({
       _id: user._id,
       name: user.name,
@@ -80,7 +80,7 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: '7d' });
-      console.log('qweqwe = ', secretKey);
+      // console.log('qweqwe = ', secretKey);
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
