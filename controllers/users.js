@@ -80,24 +80,24 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        secretKey,
-        { expiresIn: '7d' });
-      console.log('login qweqwe = ', secretKey);
+      const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: '7d' });
+      // console.log('qweqwe = ', secretKey);
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
-        httpOnly: true
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
       });
-      res.send({
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        token });
+      res.send({ token });
     })
     .catch(next);
 };
 
 module.exports.signout = (req, res) => {
-  res.clearCookie('jwt', 'token').send({ message: 'Вы вышли из аккаунта' });
+  res.cookie('jwt', 'token', {
+    maxAge: -1,
+    httpOnly: true,
+  });
+  res.status(200)
+    .send({ message: 'Вы вышли из аккаунта' });
 };
