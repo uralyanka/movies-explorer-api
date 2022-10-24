@@ -95,10 +95,5 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.signout = (req, res) => {
-  res.cookie('jwt', 'token', {
-    maxAge: -1,
-    httpOnly: true,
-  });
-  res.status(200)
-    .send({ message: 'Вы вышли из аккаунта' });
+  res.cookie('jwt', 'token').send({ message: 'Вы вышли из аккаунта' });
 };
