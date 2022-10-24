@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const ValidationError = require('../errors/validationError');
 const ConflictError = require('../errors/conflictError');
+const { secretKey } = require('../utils/config');
 
 require('dotenv').config();
 
@@ -42,7 +43,7 @@ module.exports.createUser = (req, res, next) => {
             return;
           }
           if (err.name === 'ValidationError') {
-            next(new ValidationError('400 - Переданы некорректные данные при создании пользователя'));
+            next(new ValidationError('400 - Переданы некорректные данные'));
             return;
           }
           next(err);
@@ -64,16 +65,17 @@ module.exports.updateUserProfile = (req, res, next) => {
       name: user.name,
     }))
     .catch((err) => {
+      if (err.code === 11000) {
+        next(new ConflictError('409 - Пользователь c таким email уже существует'));
+        return;
+      }
       if (err.name === 'ValidationError') {
-        next(new ValidationError('400 - Переданы некорректные данные при обновлении профиля'));
+        next(new ValidationError('400 - Переданы некорректные данные'));
         return;
       }
       next(err);
     });
 };
-
-const { NODE_ENV, JWT_SECRET } = process.env;
-const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'secret-key';
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;

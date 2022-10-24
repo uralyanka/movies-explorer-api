@@ -43,7 +43,7 @@ module.exports.createMovie = (req, res, next) => {
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('400 - Переданы некорректные данные при создании фильма'));
+        next(new ValidationError('400 - Переданы некорректные данные'));
         return;
       }
       next(err);
@@ -54,7 +54,7 @@ module.exports.deleteMovieById = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError(`404 - Фильм с указанным _id ${req.params.movieId} не найден`);
+        throw new NotFoundError('404 - Фильм с указанным id не найден');
       }
       if (movie.owner.toString() !== req.user._id) {
         throw new ForbiddenError('403 - Вы не можете удалить чужой фильм');

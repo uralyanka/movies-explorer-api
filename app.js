@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -9,6 +10,8 @@ const NotFoundError = require('./errors/notFoundError');
 const auth = require('./middlewares/auth');
 const errorsHandler = require('./middlewares/errorsHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const rateLimiter = require('./middlewares/rateLimiter');
+const { mongodb } = require('./utils/config');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -17,9 +20,11 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
+mongoose.connect(mongodb);
 
 app.use(requestLogger);
+
+app.use(rateLimiter);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -27,11 +32,13 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+app.use(helmet());
+
 app.use('/', require('./routes'));
 
 app.use(auth);
-app.use('/users', require('./routes/users'));
-app.use('/movies', require('./routes/movies'));
+app.use(require('./routes/users'));
+app.use(require('./routes/movies'));
 
 app.all('/*', (req, res, next) => {
   next(new NotFoundError('Неправильный путь'));
