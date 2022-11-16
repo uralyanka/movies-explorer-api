@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-  origin: 'https://uralyanka.mesto.nomoredomains.icu',
+  origin: 'https://uralyanka.diploma.nomoredomains.icu',
   credentials: true,
 }));
 app.use(cors);
