@@ -8,8 +8,9 @@ const { secretKey } = require('../utils/config');
 require('dotenv').config();
 
 module.exports.getCurrentUser = (req, res, next) => {
+  // console.log('Я внутри функции getCurrentUser');
   User.findById(req.user._id)
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send({ name: user.name, email: user.email }))
     .catch(next);
 };
 
@@ -89,7 +90,7 @@ module.exports.login = (req, res, next) => {
         sameSite: 'none',
         secure: true,
       });
-      res.send({ token });
+      res.send({ name: user.name, email, token });
     })
     .catch(next);
 };

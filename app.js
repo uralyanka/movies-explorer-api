@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-// const cors = require('cors');
+const cors = require('cors');
 const NotFoundError = require('./errors/notFoundError');
 const auth = require('./middlewares/auth');
 const errorsHandler = require('./middlewares/errorsHandler');
@@ -20,11 +20,12 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(cors({
-//   origin: 'https://uralyanka.diploma.nomoredomains.icu',
-//   credentials: true,
-// }));
-// app.use(cors);
+const corsOptions = {
+  origin: 'http://localhost:3001',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 mongoose.connect(mongodb);
 
