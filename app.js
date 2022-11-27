@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const corsOptions = {
-  origin: 'http://localhost:3001',
+  origin: 'https://uralyanka.diploma.nomoredomains.icu',
   credentials: true,
   optionSuccessStatus: 200,
 };
